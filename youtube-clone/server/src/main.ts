@@ -6,6 +6,9 @@ import cors from "cors";
 import {CORS_ORIGIN} from "./constants";
 import helmet from "helmet";
 import userRoute from './modules/user/user.route'
+import authRoute from './modules/auth/auth.route'
+import videoRoute from './modules/videos/video.route'
+import deserializeUser from "./middleware/deserializeUser";
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -17,8 +20,11 @@ app.use(cors({
   credentials: true
 }));
 app.use(helmet());
+app.use(deserializeUser);
 
 app.use('/api/users', userRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/videos', videoRoute);
 
 const server = app.listen(port, async () => {
   await connectToDatabase();
